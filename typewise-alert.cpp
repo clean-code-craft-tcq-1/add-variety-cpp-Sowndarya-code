@@ -32,6 +32,23 @@ BreachType classifyTemperatureBreach(
   return inferBreach(temperatureInC, lowerLimit, upperLimit);
 }
 
+BreachType Passive_Cooling::classifyLimits(double temperatureInC){
+    int lowerLimit = 0;
+    int upperLimit = 35;
+  return inferBreach(temperatureInC, lowerLimit, upperLimit);
+}
+
+BreachType High_Active_Cooling::classifyLimits(double temperatureInC){
+    int lowerLimit = 0;
+    int upperLimit = 45;
+  return inferBreach(temperatureInC, lowerLimit, upperLimit);
+}
+
+BreachType Med_Active_Cooling::classifyLimits(double temperatureInC){
+    int lowerLimit = 0;
+    int upperLimit = 40;
+  return inferBreach(temperatureInC, lowerLimit, upperLimit);
+}
 void checkAndAlert(
     AlertTarget alertTarget, BatteryCharacter batteryChar, double temperatureInC) {
 
@@ -69,3 +86,27 @@ void sendToEmail(BreachType breachType) {
       break;
   }
 }
+
+void AlertToEmail::sendAlertMsg(BreachType breachType){
+    const char* recepient = "a.b@c.com";
+  switch(breachType) {
+    case TOO_LOW:
+      printf("To: %s\n", recepient);
+      printf("Hi, the temperature is too low\n");
+      break;
+    case TOO_HIGH:
+      printf("To: %s\n", recepient);
+      printf("Hi, the temperature is too high\n");
+      break;
+    case NORMAL:
+      break;
+}
+
+  void AlertToController ::sendAlertMsg(BreachType breachType){
+      const unsigned short header = 0xfeed;
+      printf("%x : %x\n", header, breachType);
+  }
+  
+    void AlertToConsole ::sendAlertMsg(BreachType breachType){
+      printf("%x", breachType);
+  }
