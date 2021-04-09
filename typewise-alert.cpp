@@ -28,21 +28,17 @@ BreachType Med_Active_Cooling::classifyLimits(double temperatureInC){
     int upperLimit = 40;
   return inferBreach(temperatureInC, lowerLimit, upperLimit);
 }
-void checkAndAlert(
-    AlertTarget alertTarget, BatteryCharacter batteryChar, double temperatureInC) {
 
-  BreachType breachType = classifyTemperatureBreach(
-    batteryChar.coolingType, temperatureInC
-  );
-
-  switch(alertTarget) {
-    case TO_CONTROLLER:
-      sendToController(breachType);
-      break;
-    case TO_EMAIL:
-      sendToEmail(breachType);
-      break;
-  }
+BreachType TemperatureContext::classifyTemperature(double temperatureInC){
+  return temperatureCheck.classifyLimits(double temperatureInC);
+}
+  
+void checkAndAlert() {
+  TemperatureContext temperatureContext = new TemperatureContext(new Passive_Cooling());
+  temperatureContext.classifyTemperature(7);
+  
+  AlertContext alertContext = new AlertContext(new AlertToEmail());
+  alertContext.sendMsg();
 }
 
 void AlertToEmail::sendAlertMsg(BreachType breachType){
