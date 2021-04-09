@@ -11,51 +11,38 @@ BreachType inferBreach(double value, double lowerLimit, double upperLimit) {
   return NORMAL;
 }
 
-BreachType classifyTemperatureBreach(
-    CoolingType coolingType, double temperatureInC) {
-  int lowerLimit = 0;
-  int upperLimit = 0;
-  switch(coolingType) {
-    case PASSIVE_COOLING:
-      lowerLimit = 0;
-      upperLimit = 35;
-      break;
-    case HI_ACTIVE_COOLING:
-      lowerLimit = 0;
-      upperLimit = 45;
-      break;
-    case MED_ACTIVE_COOLING:
-      lowerLimit = 0;
-      upperLimit = 40;
-      break;
-  }
+BreachType Passive_Cooling::classifyLimits(double temperatureInC){
+    int lowerLimit = 0;
+    int upperLimit = 35;
   return inferBreach(temperatureInC, lowerLimit, upperLimit);
 }
 
-void checkAndAlert(
-    AlertTarget alertTarget, BatteryCharacter batteryChar, double temperatureInC) {
-
-  BreachType breachType = classifyTemperatureBreach(
-    batteryChar.coolingType, temperatureInC
-  );
-
-  switch(alertTarget) {
-    case TO_CONTROLLER:
-      sendToController(breachType);
-      break;
-    case TO_EMAIL:
-      sendToEmail(breachType);
-      break;
-  }
+BreachType High_Active_Cooling::classifyLimits(double temperatureInC){
+    int lowerLimit = 0;
+    int upperLimit = 45;
+  return inferBreach(temperatureInC, lowerLimit, upperLimit);
 }
 
-void sendToController(BreachType breachType) {
-  const unsigned short header = 0xfeed;
-  printf("%x : %x\n", header, breachType);
+BreachType Med_Active_Cooling::classifyLimits(double temperatureInC){
+    int lowerLimit = 0;
+    int upperLimit = 40;
+  return inferBreach(temperatureInC, lowerLimit, upperLimit);
 }
 
-void sendToEmail(BreachType breachType) {
-  const char* recepient = "a.b@c.com";
+BreachType TemperatureContext::classifyTemperature(double temperatureInC){
+  return temperatureCheck.classifyLimits(double temperatureInC);
+}
+  
+void checkAndAlert() {
+  TemperatureContext temperatureContext = new TemperatureContext(new Passive_Cooling());
+  temperatureContext.classifyTemperature(7);
+  
+  AlertContext alertContext = new AlertContext(new AlertToEmail());
+  alertContext.sendMsg(TOO_LOW);
+}
+
+void AlertToEmail::sendAlertMsg(BreachType breachType){
+    const char* recepient = "a.b@c.com";
   switch(breachType) {
     case TOO_LOW:
       printf("To: %s\n", recepient);
@@ -67,5 +54,13 @@ void sendToEmail(BreachType breachType) {
       break;
     case NORMAL:
       break;
-  }
 }
+
+  void AlertToController::sendAlertMsg(BreachType breachType){
+      const unsigned short header = 0xfeed;
+      printf("%x : %x\n", header, breachType);
+  }
+  
+    void AlertToConsole::sendAlertMsg(BreachType breachType){
+      printf("%x", breachType);
+  }
