@@ -37,10 +37,12 @@ class Med_Active_Cooling : public TemperatureCheck{
 
 class TemperatureContext{
   private:
-  TemperatureCheck temperatureCheck
+  TemperatureCheck temperatureCheck;
   public:
   TemperatureContext(TemperatureCheck temperatureCheck){
-   this.
+   this.temperatureCheck = temperatureCheck;
+  }
+  BreachType classifyTemperature(double temperatureInC);
 };
 
 typedef enum {
