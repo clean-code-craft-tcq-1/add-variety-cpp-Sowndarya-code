@@ -18,7 +18,7 @@ class Passive_Cooling : public TemperatureCheck{
   BreachType classifyLimits(double temperatureInC) override;
 };
 
-class Highw_Active_Cooling : public TemperatureCheck{
+class High_Active_Cooling : public TemperatureCheck{
   public:
   BreachType classifyLimits(double temperatureInC) override;
 };
