@@ -53,17 +53,17 @@ class Alert{
 class AlertToEmail : public Alert{
   public :
   void sendAlertMsg(BreachType breachType) override;
-}
+};
 
 class AlertToController : public Alert{
   public :
   void sendAlertMsg(BreachType breachType) override;
-}
+};
 
 class AlertToConsole : public Alert{
   public :
   void sendAlertMsg(BreachType breachType) override;
-}
+};
 
 class AlertContext{
   private:
