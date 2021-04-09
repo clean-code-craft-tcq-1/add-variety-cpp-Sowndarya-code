@@ -58,5 +58,35 @@ typedef struct {
 void checkAndAlert(
   AlertTarget alertTarget, BatteryCharacter batteryChar, double temperatureInC);
 
+class Alert{
+  public:
+  virtual void sendAlertMsg(BreachType breachType) = 0;
+};
+
+class AlertToEmail : public Alert{
+  public :
+  void sendAlertMsg(BreachType breachType) override;
+}
+
+class AlertToController : public Alert{
+  public :
+  void sendAlertMsg(BreachType breachType) override;
+}
+
+class AlertToConsole : public Alert{
+  public :
+  void sendAlertMsg(BreachType breachType) override;
+}
+
+class AlertContext{
+  private:
+  Alert alert;
+  public:
+  AlertContext( Alert alert){
+    this.alert = alert;
+  }
+  void sendMsg(BreachType breachType);
+};
+
 void sendToController(BreachType breachType);
 void sendToEmail(BreachType breachType);
