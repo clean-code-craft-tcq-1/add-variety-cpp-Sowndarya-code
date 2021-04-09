@@ -38,7 +38,7 @@ void checkAndAlert() {
   temperatureContext.classifyTemperature(7);
   
   AlertContext alertContext = new AlertContext(new AlertToEmail());
-  alertContext.sendMsg();
+  alertContext.sendMsg(TOO_LOW);
 }
 
 void AlertToEmail::sendAlertMsg(BreachType breachType){
